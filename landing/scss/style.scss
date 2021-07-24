@@ -664,6 +664,8 @@ body {
   }
 
   &__text {
+    max-width: 580px;
+    margin: 0 auto;
     margin-top: 23px;
     text-align: center;
   }
