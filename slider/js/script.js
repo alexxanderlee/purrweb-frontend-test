@@ -5,34 +5,11 @@ const btnNext = document.querySelector('.slider__btn_next');
 const dots = document.querySelectorAll('.dots__item');
 
 const slideWidth = slides[0].offsetWidth;
-const firstSlideClone = slides[0].cloneNode(true);
-const lastSlideClone = slides[slides.length - 1].cloneNode(true);
 const firstIndex = 1;
 const lastIndex = slides.length;
 
-const TRANSITION_SPEED = 600;
-const ANIMATION_INTERVAL = 3000;
-const isAnimated = true;
-
-let timer = null;
-let currentIndex = firstIndex;
-
-sliderTrack.prepend(lastSlideClone);
-sliderTrack.append(firstSlideClone);
-
-function setSliderTransition() {
-  sliderTrack.style.transition = `transform ${TRANSITION_SPEED}ms ease`;
-}
-
-function removeSliderTransition() {
-  sliderTrack.style.removeProperty('transition');
-}
-
-function setSlide(index) {
-  currentIndex = index;
-  const position = -(currentIndex * slideWidth);
-  sliderTrack.style.transform = `translateX(${position}px)`;
-}
+let controlsIsActive, animationDuration = null;
+let currentIndex, currentPosition = null;
 
 function setDotActive(newIndex, prevIndex) {
   if (prevIndex) {
@@ -43,66 +20,77 @@ function setDotActive(newIndex, prevIndex) {
   curDot.classList.add('dots__item_active');
 }
 
-function onNextSlide() {
-  const prevIndex = currentIndex;
-  const newIndex = currentIndex + 1;
+function animateSlide(index, callback) {
+  const prevPosition = currentPosition;
+  const newPosition = -1 * index * slideWidth;
+  const diffPosition = newPosition - prevPosition;
+  const startTime = Date.now();
 
-  removeListeners();
-  setSliderTransition();
-  setSlide(newIndex);
+  const timer = setInterval(() => {
+    const currentTime = Date.now();
+    let timeFraction = (currentTime - startTime) / animationDuration;
+    let progress, position = null;
 
-  setTimeout(() => {
-    addListeners();
-    removeSliderTransition();
-  }, TRANSITION_SPEED);
+    if (timeFraction >= 1) {
+      timeFraction = 1;
+      clearInterval(timer);
+    }
 
-  if (newIndex > lastIndex) {
-    setTimeout(() => setSlide(firstIndex), TRANSITION_SPEED);
-    setDotActive(firstIndex, prevIndex);
-  } else {
-    setDotActive(newIndex, prevIndex);
+    progress = 1 - Math.pow(1 - timeFraction, 2);
+    position = prevPosition + diffPosition * progress;
+    sliderTrack.style.transform = `translateX(${position}px)`;
+
+    if (timeFraction === 1) {
+      callback.call();
+    }
+  }, 16);
+}
+
+function setSlide(index) {
+  currentIndex = index;
+  currentPosition = -1 * currentIndex * slideWidth;
+  sliderTrack.style.transform = `translateX(${currentPosition}px)`;
+}
+
+function changeSlide(index) {
+  let newIndex = null;
+
+  if (index > lastIndex) {
+    newIndex = firstIndex;
+  } 
+  else if (index < firstIndex) {
+    newIndex = lastIndex;
+  } 
+  else {
+    newIndex = index;
   }
-  isAnimated && runSlider();
+
+  controlsIsActive = false;
+  setDotActive(newIndex, currentIndex);
+
+  animateSlide(index, () => {
+    setSlide(newIndex);
+    controlsIsActive = true;
+  });
+}
+
+function onNextSlide() {;
+  if (controlsIsActive) {
+    changeSlide(currentIndex + 1);
+  }
 }
 
 function onPrevSlide() {
-  const prevIndex = currentIndex;
-  const newIndex = currentIndex - 1;
-
-  removeListeners();
-  setSliderTransition();
-  setSlide(newIndex);
-
-  setTimeout(() => {
-    addListeners();
-    removeSliderTransition();
-  }, TRANSITION_SPEED);
-
-  if (newIndex < firstIndex) {
-    setTimeout(() => setSlide(lastIndex), TRANSITION_SPEED);
-    setDotActive(lastIndex, prevIndex);
-  } else {
-    setDotActive(newIndex, prevIndex);
+  if (controlsIsActive) {
+    changeSlide(currentIndex - 1);
   }
-  isAnimated && runSlider();
 }
 
 function handleDotClick(event) {
-  const prevIndex = currentIndex;
-  const newIndex = Number(event.target.dataset.dotIndex);
-
-  removeListeners();
-  setSliderTransition();
-  setSlide(newIndex);
-  
-  setTimeout(() => {
-    addListeners(); 
-    removeSliderTransition();
-  }, TRANSITION_SPEED);
-
-  setDotActive(newIndex, prevIndex);
-
-  isAnimated && runSlider();
+  if (controlsIsActive) {
+    const newIndex = Number(event.target.dataset.dotIndex);
+    changeSlide(newIndex);
+  }
 }
 
 function addListeners() {
@@ -111,22 +99,19 @@ function addListeners() {
   dots.forEach((dot) => dot.addEventListener('click', handleDotClick));
 }
 
-function removeListeners() {
-  btnNext.removeEventListener('click', onNextSlide);
-  btnPrev.removeEventListener('click', onPrevSlide);
-  dots.forEach((dot) => dot.removeEventListener('click', handleDotClick));
-}
-
-function runSlider() {
-  clearInterval(timer);
-  timer = setInterval(() => onNextSlide(), ANIMATION_INTERVAL);
-}
-
 function initSlider() {
+  const firstSlideClone = slides[0].cloneNode(true);
+  const lastSlideClone = slides[slides.length - 1].cloneNode(true);
+
+  sliderTrack.prepend(lastSlideClone);
+  sliderTrack.append(firstSlideClone);
+
+  animationDuration = 600;
+  controlsIsActive = true;
+
   setSlide(firstIndex);
   setDotActive(firstIndex);
   addListeners();
-  isAnimated && runSlider();
 }
 
 window.onload = () => initSlider();
