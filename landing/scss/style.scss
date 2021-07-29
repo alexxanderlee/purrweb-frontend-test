@@ -485,7 +485,7 @@ body {
 //** generate start **//
 
 .generate {
-  padding: 384px 0;
+  padding: 384px 0 250px 0;
   overflow: hidden;
 
   &__top {
@@ -573,7 +573,7 @@ body {
   &__header {
     display: block;
     margin-left: auto;
-    margin-right: 0;
+    margin-right: 60px;
   }
 
   &__title {
@@ -593,7 +593,7 @@ body {
   &__text-block {
     max-width: 240px;
     position: absolute;
-    padding: 30px 26px;
+    padding: 20px 25px;
     background: #000000;
     border: 0.76007px solid rgba(255, 255, 255, 0.5);
     border-radius: 19px;
@@ -611,12 +611,12 @@ body {
       right: 127px;
     }
     &_3 {
-      top: 730px;
-      left: 198px;
-    }
-    &_4 {
       top: 639px;
       right: -12px;
+    }
+    &_4 {
+      top: 730px;
+      left: 198px;
     }
   }
 }
@@ -627,7 +627,7 @@ body {
 
 .screen {
   position: relative;
-  padding: 250px 0;
+  padding: 250px 0 200px 0;
   background-image: url('../images/backgrounds/screen-bg.svg');
   background-repeat: no-repeat;
   background-position: center;
@@ -644,8 +644,18 @@ body {
 //** get-in-touch end **//
 
 .get-in-touch {
-  padding: 150px 0 45px 0;
-  overflow: hidden;
+  position: relative;
+  padding: 100px 0 45px 0;
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: -200px;
+    right: 0px;
+    width: 499px;
+    height: 874px;
+    background: url('../images/blur/get-in-touch-blur-2.svg') no-repeat center;
+    z-index: -1;
+  }
 
   &__title {
     position: relative;
@@ -676,17 +686,6 @@ body {
     margin-top: 82px;
     display: grid;
     grid-gap: 23px;
-
-    &::before {
-      content: '';
-      position: absolute;
-      bottom: -200px;
-      right: -500px;
-      width: 870px;
-      height: 874px;
-      background: url('../images/blur/get-in-touch-blur-2.svg') no-repeat center;
-      z-index: -1;
-    }
   }
 
   &__inputs {
@@ -789,7 +788,17 @@ body {
 
 .footer {
   padding: 45px 0 86px 0;
-  overflow: hidden;
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 637px;
+    height: 561px;
+    background: url('../images/blur/footer-blur.svg') no-repeat center;
+    z-index: -1;
+  }
 
   &__wrapper {
     display: flex;
@@ -798,16 +807,6 @@ body {
 
   &__left {
     position: relative;
-    &::before {
-      content: '';
-      position: absolute;
-      top: -400px;
-      left: -400px;
-      width: 946px;
-      height: 884px;
-      background: url('../images/blur/footer-blur.svg') no-repeat center;
-      z-index: -1;
-    }
   }
 
   &__img {

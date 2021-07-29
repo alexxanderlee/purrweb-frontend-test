@@ -1,6 +1,6 @@
 @media (max-width: 425px) {
   .container {
-    width: 90%;
+    width: 93%;
     padding: 0;
   }
 
@@ -78,6 +78,9 @@
       width: 207px;
       font-size: 35px;
       line-height: 40px;
+      br {
+        display: none;
+      }
     }
 
     &__text {
@@ -87,6 +90,9 @@
       line-height: 22px;
       padding-left: 0;
       &:after {
+        display: none;
+      }
+      br {
         display: none;
       }
     }
@@ -337,6 +343,7 @@
 
   .easier {
     padding-top: 100px;
+    padding-bottom: 50px;
 
     &__header {
       margin-right: auto;
@@ -349,10 +356,11 @@
 
     &__content {
       margin-top: 145px;
+      width: 100%;
     }
 
     &__img {
-      width: 360px;
+      width: 100%;
     }
 
     &__text-block {
@@ -369,11 +377,13 @@
       }
       &_3 {
         top: 420px;
-        left: 240px;
+        right: 0;
+        left: auto;
       }
       &_4 {
         top: 350px;
-        right: 230px;
+        left: 20px;
+        right: auto;
       }
     }
   }
@@ -385,6 +395,13 @@
   .get-in-touch {
     padding-top: 95px;
     padding-bottom: 35px;
+    &::before {
+      bottom: -400px;
+    }
+
+    &__title::before {
+      display: none;
+    }
 
     &__form {
       margin-top: 50px;
@@ -413,6 +430,7 @@
       padding: 25px 30px;
       font-size: 24px;
       line-height: 29px;
+      background-color: transparent;
     }
   }
 
@@ -439,6 +457,11 @@
 
   .footer {
     padding: 40px 0 25px 0;
+    &::before {
+      background-size: cover;
+      width: 300px;
+      height: 300px;
+    }
 
     &__wrapper {
       flex-direction: column;

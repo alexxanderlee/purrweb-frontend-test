@@ -78,6 +78,10 @@
     &__img {
       width: 250px;
     }
+
+    &__right {
+      margin-right: 40px;
+    }
   }
 
   .bi-tool {
@@ -154,7 +158,7 @@
     }
 
     &__text-block {
-      padding: 20px 17px;
+      padding: 15px 20px;
       font-size: 18px;
       line-height: 20px;
       border-radius: 12px;
@@ -165,10 +169,10 @@
         top: 154px;
       }
       &_3 {
-        top: 500px;
+        top: 400px;
       }
       &_4 {
-        top: 400px;
+        top: 500px;
       }
     }
   }
